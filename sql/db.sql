@@ -1,0 +1,32 @@
+CREATE DATABASE animelist;
+
+USE animelist;
+
+CREATE TABLE users(
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(20) NOT NULL,
+  terms_accepted TINYINT NOT NULL,
+  createdAt TIMESTAMP DEFAULT NOW(),
+  updatedAt TIMESTAMP DEFAULT NOW() ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE animes(
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  mal_id INT UNIQUE NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  image_url VARCHAR(100) NOT NULL,
+  type VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE users_animes(
+  userId INT NOT NULL,
+  animeId INT NOT NULL,
+  status TINYINT DEFAULT 0,
+  score FLOAT DEFAULT 0,
+  progress INT DEFAULT 0,
+  FOREIGN KEY(userId) REFERENCES users(id),
+  FOREIGN KEY(animeId) REFERENCES animes(id),
+  PRIMARY KEY(userId, animeId)
+);
