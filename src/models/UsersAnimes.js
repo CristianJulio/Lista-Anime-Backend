@@ -21,8 +21,8 @@ const UsersAnimes = sequelize.define("UsersAnimes", {
     }
   },
   status: {
-    type: DataTypes.TINYINT,
-    defaultValue: 0
+    type: DataTypes.STRING,
+    defaultValue: "not_added"
   },
   score: {
     type: DataTypes.FLOAT,

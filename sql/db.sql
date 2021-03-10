@@ -16,6 +16,7 @@ CREATE TABLE animes(
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   mal_id INT UNIQUE NOT NULL,
   title VARCHAR(100) NOT NULL,
+  episodes INT NOT NULL,
   image_url VARCHAR(100) NOT NULL,
   type VARCHAR(10) NOT NULL
 );
@@ -23,10 +24,36 @@ CREATE TABLE animes(
 CREATE TABLE users_animes(
   userId INT NOT NULL,
   animeId INT NOT NULL,
-  status TINYINT DEFAULT 0,
+  status VARCHAR(20) DEFAULT "not_added",
   score FLOAT DEFAULT 0,
   progress INT DEFAULT 0,
   FOREIGN KEY(userId) REFERENCES users(id),
   FOREIGN KEY(animeId) REFERENCES animes(id),
   PRIMARY KEY(userId, animeId)
 );
+
+SELECT users.username, animes.title, users_animes.status
+  FROM users_animes
+  INNER JOIN animes 
+    ON users_animes.animeId = animes.id
+  INNER JOIN users
+    ON users_animes.userId = users.id;
+
+-- Members
+SELECT animes.title, count(*) as n_members
+  FROM users_animes
+  INNER JOIN animes 
+    ON users_animes.animeId = animes.id
+  INNER JOIN users
+    ON users_animes.userId = users.id GROUP BY animes.title;
+
+-- number by status
+SELECT animes.title, users_animes.status, count(*) as n_status
+  FROM users_animes
+  INNER JOIN animes
+    ON animes.id = users_animes.animeId
+  GROUP BY users_animes.status, animes.title;
+
+SELECT * FROM users_animes
+  INNER JOIN animes 
+    ON animes.id = users_animes.animeId;

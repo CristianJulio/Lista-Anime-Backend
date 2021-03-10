@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const { createUser } = require("../controllers/user.controller");
+const { checkNewUser, checkTerms } = require("../middlewares/index");
 const { check } = require("express-validator");
 
 // /api/users
@@ -10,7 +11,7 @@ router.post("/", [
   check("username", "Username is required").not().isEmpty(),
   check("email", "Enter a valid email").isEmail(),
   check("password", "Password must have a minimum of 6 characters").isLength({ min: 6 })
-], createUser);
+], checkTerms, checkNewUser, createUser);
 
 router.put("/");
 

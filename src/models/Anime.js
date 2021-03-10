@@ -17,6 +17,10 @@ const Anime = sequelize.define("Anime", {
     type: DataTypes.STRING,
     allowNull: false
   },
+  episodes: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   image_url: {
     type: DataTypes.STRING,
     allowNull: false
