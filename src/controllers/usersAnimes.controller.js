@@ -77,9 +77,18 @@ exports.addAnime = async function (req, res) {
 
 exports.removeAnime = async function (req, res) {
   try {
-    res.status(200).json({ msg: "Anime Removed" });
+    res.status(200).json({ msg: "Tengo que terminarlo" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: errorMessage });
   }
 };
+
+exports.updateAnime = async function(req, res) {
+  try {
+    res.status(200).json("Tengo que terminarlo");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: errorMessage });
+  }
+}

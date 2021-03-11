@@ -63,3 +63,21 @@ exports.deleteUser = async function (req, res) {
     res.status(500).json({ msg: errorMessage });
   }
 };
+
+exports.updateUser = async function(req, res) {
+  try {
+    res.status(200).json("Tengo que terminarlo");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: errorMessage });
+  }
+}
+
+exports.getUser = async function(req, res) {
+  try {
+    res.status(200).json("Tengo que terminarlo");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: errorMessage });
+  }
+}

@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { addAnime, removeAnime } = require("../controllers/usersAnimes.controller");
+const { addAnime, removeAnime, updateAnime } = require("../controllers/usersAnimes.controller");
 const { checkToken } = require("../middlewares/index");
 const { check } = require("express-validator");
 
@@ -16,5 +16,7 @@ router.post("/", checkToken, [
 ], addAnime);
 
 router.delete("/:animeId", checkToken, removeAnime);
+
+router.put("/:animeId", checkToken, updateAnime);
 
 module.exports = router;
