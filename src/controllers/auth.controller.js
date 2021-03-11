@@ -12,8 +12,6 @@ exports.signin = async function(req, res) {
     const user = await User.findOne({ where: { username } });
     if(!user) return res.status(404).json({ msg: `Username (${username}) does not exist` });
 
-    console.log(user);
-    
     const result = await bcryptjs.compare(password, user.password);
 
     if(!result) return res.status(400).json({ msg: "Incorrect Password" });
@@ -30,9 +28,10 @@ exports.signin = async function(req, res) {
 }
 
 exports.getCurrentUser = async function(req, res) {
-  try {
-    const user = await User.findOne({ where: { id: req.userId }, attributes: ['username'] });
+  const reqUserId = req.userId;
 
+  try {
+    const user = await User.findOne({ where: { id: reqUserId }, attributes: ['username'] });
     if(!user) return res.status(404).json({ msg: "User not found", user: {} });
 
     res.status(200).json({ user });

@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
-const { createUser } = require("../controllers/user.controller");
-const { checkNewUser, checkTerms } = require("../middlewares/index");
+const { createUser, deleteUser } = require("../controllers/user.controller");
+const { checkNewUser, checkTerms, checkToken } = require("../middlewares/index");
 const { check } = require("express-validator");
 
 // /api/users
@@ -15,6 +15,6 @@ router.post("/", [
 
 router.put("/");
 
-router.delete("/");
+router.delete("/:userId", checkToken, deleteUser);
 
 module.exports = router;

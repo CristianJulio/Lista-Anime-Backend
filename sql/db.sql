@@ -27,33 +27,33 @@ CREATE TABLE users_animes(
   status VARCHAR(20) DEFAULT "not_added",
   score FLOAT DEFAULT 0,
   progress INT DEFAULT 0,
-  FOREIGN KEY(userId) REFERENCES users(id),
-  FOREIGN KEY(animeId) REFERENCES animes(id),
+  FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY(animeId) REFERENCES animes(id) ON DELETE CASCADE,
   PRIMARY KEY(userId, animeId)
 );
 
-SELECT users.username, animes.title, users_animes.status
-  FROM users_animes
-  INNER JOIN animes 
-    ON users_animes.animeId = animes.id
-  INNER JOIN users
-    ON users_animes.userId = users.id;
+-- SELECT users.username, animes.title, users_animes.status
+--   FROM users_animes
+--   INNER JOIN animes 
+--     ON users_animes.animeId = animes.id
+--   INNER JOIN users
+--     ON users_animes.userId = users.id;
 
--- Members
-SELECT animes.title, count(*) as n_members
-  FROM users_animes
-  INNER JOIN animes 
-    ON users_animes.animeId = animes.id
-  INNER JOIN users
-    ON users_animes.userId = users.id GROUP BY animes.title;
+-- -- Members
+-- SELECT animes.title, count(*) as n_members
+--   FROM users_animes
+--   INNER JOIN animes 
+--     ON users_animes.animeId = animes.id
+--   INNER JOIN users
+--     ON users_animes.userId = users.id GROUP BY animes.title;
 
--- number by status
-SELECT animes.title, users_animes.status, count(*) as n_status
-  FROM users_animes
-  INNER JOIN animes
-    ON animes.id = users_animes.animeId
-  GROUP BY users_animes.status, animes.title;
+-- -- number by status
+-- SELECT animes.title, users_animes.status, count(*) as n_status
+--   FROM users_animes
+--   INNER JOIN animes
+--     ON animes.id = users_animes.animeId
+--   GROUP BY users_animes.status, animes.title;
 
-SELECT * FROM users_animes
-  INNER JOIN animes 
-    ON animes.id = users_animes.animeId;
+-- SELECT * FROM users_animes
+--   INNER JOIN animes 
+--     ON animes.id = users_animes.animeId;
