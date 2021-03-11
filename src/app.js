@@ -14,7 +14,7 @@ app.set('port', process.env.PORT || 4000);
 
 // CORS OPTIONS
 const corsOptions = {
-  origin: process.env.FRONT_DOMAIN || 'http://localhost:3000',
+  origin: process.env.FRONT_DOMAIN,
   optionsSuccessStatus: 200
 }
 

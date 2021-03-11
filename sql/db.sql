@@ -16,7 +16,7 @@ CREATE TABLE animes(
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   mal_id INT UNIQUE NOT NULL,
   title VARCHAR(100) NOT NULL,
-  episodes INT NOT NULL,
+  episodes INT NULL DEFAULT 0,
   image_url VARCHAR(100) NOT NULL,
   type VARCHAR(10) NOT NULL
 );
@@ -24,9 +24,9 @@ CREATE TABLE animes(
 CREATE TABLE users_animes(
   userId INT NOT NULL,
   animeId INT NOT NULL,
-  status VARCHAR(20) DEFAULT "not_added",
-  score FLOAT DEFAULT 0,
-  progress INT DEFAULT 0,
+  status VARCHAR(20) NOT NULL,
+  score FLOAT NOT NULL,
+  progress INT NOT NULL,
   FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY(animeId) REFERENCES animes(id) ON DELETE CASCADE,
   PRIMARY KEY(userId, animeId)
