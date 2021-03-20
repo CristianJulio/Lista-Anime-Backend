@@ -31,7 +31,8 @@ const Anime = sequelize.define("Anime", {
   }
 }, {
   sequelize,
-  timestamps: false
+  timestamps: false,
+  tableName: "animes"
 });
 
 module.exports = Anime;
