@@ -31,7 +31,7 @@ exports.getCurrentUser = async function(req, res) {
   const reqUserId = req.userId;
 
   try {
-    const user = await User.findOne({ where: { id: reqUserId }, attributes: ['username'] });
+    const user = await User.findOne({ where: { id: reqUserId }, attributes: ['username', 'email'] });
     if(!user) return res.status(404).json({ msg: "User not found", user: {} });
 
     res.status(200).json({ user });

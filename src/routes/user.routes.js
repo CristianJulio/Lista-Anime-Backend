@@ -5,7 +5,7 @@ const { checkNewUser, checkTerms, checkToken } = require("../middlewares/index")
 const { check } = require("express-validator");
 
 // /api/users
-router.get("/:userId", checkToken, getUser);
+router.get("/:username", checkToken, getUser);
 
 router.post("/", [
   check("username", "Username is required").not().isEmpty(),

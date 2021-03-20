@@ -1,7 +1,9 @@
 const User = require("../models/User");
+const UsersAnimes = require("../models/UsersAnimes");
 const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
+const Anime = require("../models/Anime");
 
 // Global
 const errorMessage = "Internal server error";
@@ -37,7 +39,7 @@ exports.createUser = async function (req, res) {
       if(err) throw err;
       
       // RESPONSE
-      res.status(200).json({ msg: "user Created Successfully", token });
+      res.status(200).json({ msg: "User created successfully", token });
     });
   } catch (error) {
     console.log(error);
@@ -74,8 +76,41 @@ exports.updateUser = async function(req, res) {
 }
 
 exports.getUser = async function(req, res) {
+  const username = req.params.username;
+  
   try {
-    res.status(200).json("Tengo que terminarlo");
+    const user = await User.findOne({ where: { username } }, { fields: ['id', 'username', 'email'] });
+    if(!user) return res.status(404).json("User not found");
+
+    const animeList = await UsersAnimes.findAll({ attributes: ['animeId', 'status', 'score', 'progress'], where: { userId: user.id } });
+    
+    let animes = [];
+
+    for(let i = 0; i < animeList.length; i++) {
+      let anime = await Anime.findOne({ 
+        attributes: ['title', 'episodes', 'type', 'image_url', 'mal_id'], 
+        where: { id: animeList[i].dataValues.animeId } });
+      animes.push({...anime.dataValues, ...animeList[i].dataValues});
+    }
+
+    const completedAnimes = animes.filter(anime => anime.status === "completed");
+    const watchingAnimes = animes.filter(anime => anime.status === "watching");
+    const planningAnimes = animes.filter(anime => anime.status === "plan_to_watch");
+    const pausedAnimes = animes.filter(anime => anime.status === "paused");
+    const droppedAnimes = animes.filter(anime => anime.status === "dropped");
+    const rewatchingAnimes = animes.filter(anime => anime.status === "rewatching");
+
+    res.status(200).json({
+      userInfo: { username: user.username },
+      animeList: {
+        completed: completedAnimes,
+        watching: watchingAnimes,
+        plan_to_watch: planningAnimes,
+        paused: pausedAnimes,
+        dropped: droppedAnimes,
+        rewatching: rewatchingAnimes,
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: errorMessage });
