@@ -115,7 +115,7 @@ exports.removeAnime = async function (req, res) {
     if (!pairdFound)
       return res
         .status(404)
-        .json({ msg: "This anime does not exist in user list" });
+        .json({ msg: "This anime does not exist in your list" });
 
     // Remuevo el anime de la lista del usuario
     await UsersAnimes.destroy({
@@ -125,7 +125,7 @@ exports.removeAnime = async function (req, res) {
       },
     });
 
-    res.status(200).json({ msg: "Anime deleted from user list" });
+    res.status(200).json({ msg: "Anime deleted from your list" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: errorMessage });
@@ -152,7 +152,7 @@ exports.updateAnime = async function (req, res) {
     if (!pairdFound)
       return res
         .status(404)
-        .json({ msg: "This anime does not exist in user list" });
+        .json({ msg: "This anime does not exist in your list" });
 
     // Actualizo el estado del anime en la lista del usuario
     await UsersAnimes.update(
