@@ -68,7 +68,30 @@ exports.deleteUser = async function (req, res) {
 };
 
 exports.updateUser = async function(req, res) {
+  const { username, email, password, img_url } = req.body;
+  const reqUserId = req.userId;
+  const paramsUserId = req.params.userId;
+  
   try {
+    const user = await User.findOne({ where: { id: reqUserId } });
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    if (user.id !== Number(paramsUserId))
+      return res.status(401).json({msg: "You do not have permissions to perform this action ",});
+
+    const newUser = {};
+
+    if(username) newUser.username = username;
+    if(email) newUser.email = email;
+    if(password) {
+      const salt = await bcryptjs.genSalt(10);
+      const hashed = await bcryptjs.hash(password, salt);
+      newUser.password = hashed;
+    }
+    if(img_url) newUser.img_url = img_url;
+
+    await User.update(newUser, { where: { id: reqUserId } });
+    
     res.status(200).json("Tengo que terminarlo");
   } catch (error) {
     console.log(error);
