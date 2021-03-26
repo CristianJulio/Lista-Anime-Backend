@@ -25,6 +25,9 @@ const User = sequelize.define("User", {
   terms_accepted: {
     type: DataTypes.TINYINT,
     allowNull: false
+  },
+  img_url: {
+    type: DataTypes.STRING
   }
 }, {
   sequelize,

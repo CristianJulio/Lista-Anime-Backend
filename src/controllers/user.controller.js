@@ -10,7 +10,7 @@ const errorMessage = "Internal server error";
 
 // Use this function to create a new User
 exports.createUser = async function (req, res) {
-  const { username, email, password, terms_accepted } = req.body;
+  const { username, email, password, terms_accepted, img_url } = req.body;
   const errors = validationResult(req);
 
   if (!errors.isEmpty())
@@ -28,9 +28,10 @@ exports.createUser = async function (req, res) {
         email,
         password: hashedPass,
         terms_accepted,
+        img_url: img_url === "" ? null : img_url
       },
       {
-        fields: ["username", "email", "password", "terms_accepted"],
+        fields: ["username", "email", "password", "terms_accepted", "img_url"],
       }
     );
 
