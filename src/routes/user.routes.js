@@ -13,8 +13,12 @@ router.post("/", [
   check("password", "Password must have a minimum of 6 characters").isLength({ min: 6 })
 ], checkTerms, checkNewUser, createUser);
 
-router.put("/:userId", checkToken, updateUser);
+router.put("/:userId", [
+  check("old_password", "Old password is required").not().isEmpty()
+], checkNewUser, checkToken, updateUser);
 
-router.delete("/:userId", checkToken, deleteUser);
+router.delete("/:userId", [
+  check("old_password", "Old password is required").not().isEmpty()
+], checkToken, deleteUser);
 
 module.exports = router;

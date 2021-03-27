@@ -5,39 +5,48 @@ const bcryptjs = require("bcryptjs");
 // GLOBAL
 const errorMessage = "Internal server error";
 
-exports.signin = async function(req, res) {
+exports.signin = async function (req, res) {
   const { username, password } = req.body;
-  
+
   try {
     const user = await User.findOne({ where: { username } });
-    if(!user) return res.status(404).json({ msg: `Username (${username}) does not exist` });
+    if (!user)
+      return res
+        .status(404)
+        .json({ msg: `Username (${username}) does not exist` });
 
     const result = await bcryptjs.compare(password, user.password);
 
-    if(!result) return res.status(400).json({ msg: "Incorrect Password" });
+    if (!result) return res.status(400).json({ msg: "Incorrect Password" });
 
-    jwt.sign({ userId: user.id }, process.env.SECRET_WORD, { expiresIn: 86400 }, function(err, token) {
-      if(err) throw err;
-      res.status(200).json({ msg: "You have successfully signed", token });
-    });
-    
+    jwt.sign(
+      { userId: user.id },
+      process.env.SECRET_WORD,
+      { expiresIn: 86400 },
+      function (err, token) {
+        if (err) throw err;
+        res.status(200).json({ msg: "You have successfully signed", token });
+      }
+    );
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: errorMessage });
   }
-}
+};
 
-exports.getCurrentUser = async function(req, res) {
+exports.getCurrentUser = async function (req, res) {
   const reqUserId = req.userId;
 
   try {
-    const user = await User.findOne({ where: { id: reqUserId }, attributes: ['username', 'email'] });
-    if(!user) return res.status(404).json({ msg: "User not found", user: {} });
+    const user = await User.findOne({
+      where: { id: reqUserId },
+      attributes: ["id", "username", "email", "img_url"],
+    });
+    if (!user) return res.status(404).json({ msg: "User not found", user: {} });
 
     res.status(200).json({ user });
-    
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: errorMessage });
   }
-}
+};

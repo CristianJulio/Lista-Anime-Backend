@@ -49,8 +49,12 @@ exports.createUser = async function (req, res) {
 };
 
 exports.deleteUser = async function (req, res) {
+  const { old_password } = req.body;
   const reqUserId = req.userId;
   const paramsUserId = req.params.userId;
+
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   try {
     const user = await User.findOne({ where: { id: reqUserId } });
@@ -58,6 +62,9 @@ exports.deleteUser = async function (req, res) {
 
     if (user.id !== Number(paramsUserId))
       return res.status(401).json({msg: "You do not have permissions to perform this action ",});
+
+    const result = await bcryptjs.compare(old_password, user.password);
+    if(!result) return res.status(400).json({ msg: "Incorrect Password" });
 
     await User.destroy({ where: { id: paramsUserId } });
     res.status(200).json({ msg: "User Deleted" });
@@ -68,9 +75,12 @@ exports.deleteUser = async function (req, res) {
 };
 
 exports.updateUser = async function(req, res) {
-  const { username, email, password, img_url } = req.body;
+  const { username, email, password, img_url, old_password } = req.body;
   const reqUserId = req.userId;
   const paramsUserId = req.params.userId;
+
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
   
   try {
     const user = await User.findOne({ where: { id: reqUserId } });
@@ -78,6 +88,9 @@ exports.updateUser = async function(req, res) {
 
     if (user.id !== Number(paramsUserId))
       return res.status(401).json({msg: "You do not have permissions to perform this action ",});
+
+    const result = await bcryptjs.compare(old_password, user.password);
+    if(!result) return res.status(400).json({ msg: "Incorrect Password" });
 
     const newUser = {};
 
@@ -92,7 +105,7 @@ exports.updateUser = async function(req, res) {
 
     await User.update(newUser, { where: { id: reqUserId } });
     
-    res.status(200).json("Tengo que terminarlo");
+    res.status(200).json({msg: "User Updated"});
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: errorMessage });
