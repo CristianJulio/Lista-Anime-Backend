@@ -104,8 +104,13 @@ exports.updateUser = async function(req, res) {
     if(img_url) newUser.img_url = img_url;
 
     await User.update(newUser, { where: { id: reqUserId } });
+
+    if(img_url) {
+      res.status(200).json({msg: "Avatar Changed"});
+    } else {
+      res.status(200).json({msg: "User Updated"});
+    }
     
-    res.status(200).json({msg: "User Updated"});
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: errorMessage });

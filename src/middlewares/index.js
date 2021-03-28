@@ -7,13 +7,16 @@ exports.checkNewUser = async function(req, res, next) {
   const { username, email } = req.body;
   
   try {
-    const userFound = await User.findOne({ where: { username } });
-    if(userFound) return res.status(400).json({ msg: "Username already in use" });
+    if(username || email) {
+      const userFound = await User.findOne({ where: { username } });
+      if(userFound) return res.status(400).json({ msg: "Username already in use" });
 
-    const emailFound = await User.findOne({ where: { email } });
-    if(emailFound) return res.status(400).json({ msg: "Email already in use" });
+      const emailFound = await User.findOne({ where: { email } });
+      if(emailFound) return res.status(400).json({ msg: "Email already in use" });
+    } else {
+      next();
+    }
 
-    next();
     
   } catch (error) {
     console.log(error);
